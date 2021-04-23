@@ -153,37 +153,40 @@ export default class FlatListBasics extends Component<Props> {
                         (
                             <>
                                 <View style={styles.container}>
-                                    <Card containerStyle={{ width: '90%', display: "flex", flexDirection:'row'}} >
-                                        <View style={styles.topContainer}>
+                                    <Card containerStyle={{ width: '90%', display: "flex", }} >
+                                        <View style={{flexDirection:'row',display: "flex"}}>
 
 
+                                            <View style={styles.topContainer}>
+                                                {preview}
+                                            </View>
+                                            <View style={styles.bookDetails}>
+                                                <Text style={[styles.name]}>{item.name?.name}{`\n`}</Text>
+                                                <Text style={styles.name}>{item.author?.first_name} {item.author?.last_name}{`\n`}</Text>
+                                                <Text style={styles.name}>{item?.description}{`\n`}</Text>
+                                                <Text style={styles.name}>{item?.publisher?.name}{`\n`}</Text>
+                                                <Text style={styles.name}>{item?.publisher?.descripton}{`\n`}</Text>
 
-                                            {preview}
 
-
-
-
-                                        </View>
-                                        <View style={styles.bookDetails}>
-                                            <Text style={[styles.name]}>{item.name?.name}{`\n`}</Text>
-                                            <Text style={styles.name}>{item.author?.first_name} {item.author?.last_name}{`\n`}</Text>
-                                            <Text style={styles.name}>{item?.description}{`\n`}</Text>
-                                            <Icon
+                                                {/* <Icon
                                                 name='download'
                                                 type='font-awesome'
                                                 color='#f50'
 
                                                 // style={{marginRight:5}}
                                                 size={30}
-                                            />
-                                            <TouchableOpacity onPress={this.onDownloadImagePress}>
-                                                <Text >
-                                                    Download
+                                            /> */}
+                                                <TouchableOpacity onPress={this.onDownloadImagePress}>
+                                                    <Text>
+                                                        Download
                                                 </Text>
-                                            </TouchableOpacity>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
+
                                     </Card>
                                 </View>
+
 
                             </>
                         )}
@@ -217,28 +220,29 @@ const styles = StyleSheet.create({
 
     },
     topContainer: {
-        flex: 0.8,
+        flex: 0.2,
         flexDirection: "column",
         flexWrap: "nowrap",
-        justifyContent: "flex-end"
+        justifyContent: "flex-start"
     },
-    bookDetails:{
+    bookDetails: {
         flex: 0.8,
         flexDirection: "column",
-        flexWrap: "nowrap",
+        // flexWrap: "nowrap",
         justifyContent: "flex-end"
 
     },
     name: {
         marginTop: 5,
-        marginRight: 10,
+        // marginRight: 10,
+        textAlign:'right',
         fontWeight: "600",
         color: "black"
     },
     userImg: {
-        borderRadius: 50,
-        width: 55,
-        height: 55,
+        borderRadius: 20,
+        width: 150,
+        height: 200,
         marginLeft: 10
     },
     card: {
