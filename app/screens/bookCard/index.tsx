@@ -100,6 +100,7 @@ export default class FlatListBasics extends Component<Props> {
         console.log("Press download")
         const { bookDescription } = this.state
         console.log('BOOK DETAIL', bookDescription)
+        console.log('hi');
 
 
 
