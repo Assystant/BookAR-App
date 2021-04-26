@@ -125,6 +125,8 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    flavorDimensions "platform"
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -136,6 +138,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -143,6 +146,16 @@ android {
             enable enableSeparateBuildPerCPUArchitecture
             universalApk false  // If true, also generate a universal APK
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
+    }
+    productFlavors {
+        ar {
+            // resValue 'string', 'ARB', 'ViroSample-ar'
+            buildConfigField 'String', 'VR_PLATFORM', '"AR"' //default to GVR
+        }
+        gvr {
+            // resValue 'string', 'ARB', 'ViroSample-gvr'
+            buildConfigField 'String', 'VR_PLATFORM', '"GVR"'
         }
     }
     signingConfigs {
