@@ -3,15 +3,23 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint .",
+    "android": "npx react-native run-android --variant=arDebug",
+    "ios": "npx react-native run-ios",
+    "start": "npx react-native start",
+    "prestart": "./node_modules/@viro-community/react-viro/bin/run_ngrok.sh",
+    "test": "npx jest",
+    "lint": "npx eslint .",
     "pod": "npx pod-install",
     "clean": "cd android && ./gradlew clean && cd ..",
     "clean-android": "yarn clean && yarn jetify && yarn android",
-    "jetify": "npx jetify"
+    "jetify": "npx jetify",
+    "assemble-android": "cd android && ./gradlew assembleRelease && cd ..",
+    "bundle-android": "cd android && ./gradlew bundleRelease && cd ..",
+    "build-android": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/generated/res/",
+    "apk": "yarn build-android && yarn assemble-android",
+    "clean-apk": "yarn clean && yarn jetify && yarn build-android && yarn assemble-android",
+    "aab": "yarn build-android && yarn bundle-android",
+    "clean-aab": "yarn clean && yarn jetify && yarn build-android && yarn bundle-android"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
@@ -29,7 +37,8 @@
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.1.1",
     "react-native-vector-icons": "^8.1.0",
-    "react-navigation-stack": "^2.10.4"
+    "react-navigation-stack": "^2.10.4",
+    "typescript": "^4.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

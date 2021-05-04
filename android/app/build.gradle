@@ -151,7 +151,7 @@ android {
     productFlavors {
         ar {
             // resValue 'string', 'ARB', 'ViroSample-ar'
-            buildConfigField 'String', 'VR_PLATFORM', '"AR"' //default to GVR
+            buildConfigField 'String', 'VR_PLATFORM', '"GVR"' //default to GVR
         }
         gvr {
             // resValue 'string', 'ARB', 'ViroSample-gvr'
