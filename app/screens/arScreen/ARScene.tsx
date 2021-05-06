@@ -10,7 +10,8 @@ import {
 import constants from '../../utils/constant';
 import { baseURI } from '../../utils/api';
 
-const ARScene = ({bookDescription}) => {
+const ARScene = ({bookDescription,showAuto,showHdr}) => {
+    console.log('SHOW AUTO',showAuto)
     return (
       <ViroARScene>
         <ViroAmbientLight color="#ffffff" intensity={200} />
@@ -31,6 +32,8 @@ const ARScene = ({bookDescription}) => {
                 rotation: [-90, 0, 0],
                 // scale: [2,2,0],
                 source: {uri: baseURI(phrase.object)},
+                autofocus:showAuto,
+                hdrEnabled:showHdr,
                 // onClick: () => {
                 //     //     Linking.openURL('https://www.youtube.com/watch?v=aSIiBTEnE3o');
                 // }

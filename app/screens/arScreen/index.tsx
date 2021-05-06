@@ -1,6 +1,8 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {View, StyleSheet, Text, BackHandler} from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { View, StyleSheet, Text, BackHandler, Image } from 'react-native';
 import { RouteProp, useFocusEffect } from '@react-navigation/core';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthContext, SplashScreen, StackParamList } from '../../../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -14,23 +16,26 @@ import {
 type ARScreenRouteProps = RouteProp<StackParamList, 'ARScreen'>;
 type ARScreenNavigationProps = StackNavigationProp<StackParamList, 'ARScreen'>;
 type ARScreenProps = {
-  route:ARScreenRouteProps,
+  route: ARScreenRouteProps,
   navigation: ARScreenNavigationProps,
 };
-const ARScreen = ({route, navigation}:ARScreenProps) => {
+const ARScreen = ({ route, navigation }: ARScreenProps) => {
   const [loading, setLoading] = useState<Boolean>(true);
   const [loadingFailed, setLoadingFailed] = useState<Boolean>(false);
-  const {book, bookDescription} = route.params;
+  const [showHdr, setHdr] = useState<Boolean>(false);
+  const [showAuto, setshowAuto] = useState<Boolean>(false);
+
+  const { book, bookDescription } = route.params;
   const initializeAR = () => {
     setLoading(true);
     const targets = {};
     console.log(bookDescription)
     bookDescription.forEach(phrase => {
-        targets[`trigger_${phrase.id}`] = {
-          source: {uri: constants.baseURI(phrase.trigger)},
-          orientation: 'Up',
-          physicalWidth: 0.1, // real world width in meters
-        };
+      targets[`trigger_${phrase.id}`] = {
+        source: { uri: constants.baseURI(phrase.trigger) },
+        orientation: 'Up',
+        physicalWidth: 0.1, // real world width in meters
+      };
     });
     ViroARTrackingTargets.createTargets(targets);
     setLoading(false);
@@ -44,55 +49,100 @@ const ARScreen = ({route, navigation}:ARScreenProps) => {
     useCallback(
       () => {
         const onBackPress = () => {
-          if(!loading){
-          bookDescription.forEach(phrase => {
-            ViroARTrackingTargets.deleteTarget(`trigger_${phrase.id}`);
-          });
-          setLoading(true);
-          setTimeout(onBackPress, 1000);
-          return true;
-        } else {
-          // return false;
-        }
+          if (!loading) {
+            bookDescription.forEach(phrase => {
+              ViroARTrackingTargets.deleteTarget(`trigger_${phrase.id}`);
+            });
+            setLoading(true);
+            setTimeout(onBackPress, 1000);
+            return true;
+          } else {
+            // return false;
+          }
         }
         BackHandler.addEventListener('hardwareBackPress', onBackPress);
         return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-        
+
       },
       [bookDescription, loading],
     )
-  ); 
+  );
   useEffect(initializeAR, []);
-    if(loading) {
-      return <SplashScreen />;
-    }
-    if(loadingFailed) {
-      return (
-        <View style={[styles.container, styles.emptyContainer]}>
-          <Text style={styles.emptyContainerText}>
-            Failed to load AR
-          </Text>
-          <TouchableOpacity onPress={initializeAR}>
-            <Text style={styles.retryButton}>Retry</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
+  if (loading) {
+    return <SplashScreen />;
+  }
+  if (loadingFailed) {
     return (
-      <>
-        <ViroARSceneNavigator
-            apiKey="API_KEY_HERE"
-            initialScene={{
-                scene: ARScene,
-                passProps: {
-                    book, 
-                    bookDescription,
-                }
-            }}
-        />
-      </>
+      <View style={[styles.container, styles.emptyContainer]}>
+        <Text style={styles.emptyContainerText}>
+          Failed to load AR
+          </Text>
+        <TouchableOpacity onPress={initializeAR}>
+          <Text style={styles.retryButton}>Retry</Text>
+        </TouchableOpacity>
+      </View>
     );
+  }
+  const onPressHdr = async () => {
+    setHdr(!showHdr)
+    await AsyncStorage.setItem('hdr', JSON.stringify(showHdr));
+    AsyncStorage.getItem('hdr').then(showHdr => {
+      // console.log('SHOW HDR',showHdr)
+        })
+
+
+  }
+  const onPressAutoFocus = async () => {
+    setshowAuto(!showAuto)
+    await AsyncStorage.setItem('autoFocus', JSON.stringify(showAuto));
+    AsyncStorage.getItem('autoFocus').then(showAuto => {
+      // console.log('SHOW AUTO',showAuto)
+    })
+
+
+  }
+  return (
+    <>
+      <View style={{ backgroundColor: 'black', height: 5, width: "100%", flex: 0.1, flexDirection: 'row' }}>
+
+        {showHdr ?
+          <TouchableOpacity onPress={onPressHdr}>
+            <Image source={require('../../assests/hdr2.png')} style={{ margin: 10, height: 30, width: 30 }} />
+          </TouchableOpacity>
+          :
+          <TouchableOpacity onPress={onPressHdr}>
+            <Image source={require('../../assests/hdr1.png')} style={{ margin: 10, height: 30, width: 30 }} />
+          </TouchableOpacity>
+
         }
+        {showAuto ?
+          <TouchableOpacity onPress={onPressAutoFocus}>
+            <Image source={require('../../assests/auto-focus.png')} style={{ margin: 10, height: 30, width: 30 }} />
+          </TouchableOpacity>
+          :
+          <TouchableOpacity onPress={onPressAutoFocus}>
+            <Image source={require('../../assests/auto-focus.jpeg')} style={{ margin: 10, height: 30, width: 30 }} />
+          </TouchableOpacity>
+
+        }
+
+      </View>
+      <ViroARSceneNavigator
+        apiKey="API_KEY_HERE"
+        initialScene={{
+          scene: ARScene,
+          passProps: {
+            book,
+            bookDescription,
+            showAuto,
+            showHdr
+          }
+        }}
+      />
+
+    </>
+  );
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
