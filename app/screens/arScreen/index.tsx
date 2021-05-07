@@ -103,31 +103,32 @@ const ARScreen = ({ route, navigation }: ARScreenProps) => {
   }
   return (
     <>
-      <View style={{ backgroundColor: 'black', height: 5, width: "100%", flex: 0.1, flexDirection: 'row' }}>
+      <View style={{ backgroundColor: 'black', height: 5, width: "100%", flex: 0.1, flexDirection: 'row',justifyContent:'space-evenly'}}>
 
         {showHdr ?
-          <TouchableOpacity onPress={onPressHdr}>
-            <Image source={require('../../assests/hdr2.png')} style={{ margin: 10, height: 30, width: 30 }} />
+          <TouchableOpacity onPress={onPressHdr}  disabled={!showHdr}>
+            <Image source={require('../../assests/hdr2.png')} style={{ margin: 10, height: 30, width: 30,marginTop:20,}} />
           </TouchableOpacity>
           :
-          <TouchableOpacity onPress={onPressHdr}>
-            <Image source={require('../../assests/hdr1.png')} style={{ margin: 10, height: 30, width: 30 }} />
+          <TouchableOpacity onPress={onPressHdr} >
+            <Image source={require('../../assests/hdr1.png')} style={{ margin: 10, height: 30, width: 30,marginTop:20 }} />
           </TouchableOpacity>
 
         }
         {showAuto ?
-          <TouchableOpacity onPress={onPressAutoFocus}>
-            <Image source={require('../../assests/auto-focus.png')} style={{ margin: 10, height: 30, width: 30 }} />
+          <TouchableOpacity onPress={onPressAutoFocus} disabled={!showAuto}>
+            <Image source={require('../../assests/auto-focus.png')} style={{ margin: 10, height: 30, width: 30 ,marginTop:20}} />
           </TouchableOpacity>
           :
-          <TouchableOpacity onPress={onPressAutoFocus}>
-            <Image source={require('../../assests/auto-focus.jpeg')} style={{ margin: 10, height: 30, width: 30 }} />
+          <TouchableOpacity onPress={onPressAutoFocus} >
+            <Image source={require('../../assests/auto-focus.jpeg')} style={{ margin: 10, height: 30, width: 30,marginTop:20 }} />
           </TouchableOpacity>
 
         }
 
       </View>
       <ViroARSceneNavigator
+    
         apiKey="API_KEY_HERE"
         initialScene={{
           scene: ARScene,

@@ -11,7 +11,7 @@ import constants from '../../utils/constant';
 import { baseURI } from '../../utils/api';
 
 const ARScene = ({bookDescription,showAuto,showHdr}) => {
-    console.log('SHOW AUTO',showAuto)
+    console.log('SHOW AUTO',bookDescription)
     return (
       <ViroARScene>
         <ViroAmbientLight color="#ffffff" intensity={200} />
