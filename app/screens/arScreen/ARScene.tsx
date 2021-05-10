@@ -32,8 +32,8 @@ const ARScene = ({bookDescription,showAuto,showHdr}) => {
                 rotation: [-90, 0, 0],
                 // scale: [2,2,0],
                 source: {uri: baseURI(phrase.object)},
-                autofocus:showAuto,
-                hdrEnabled:showHdr,
+                autofocus: { showAuto },
+                hdrEnabled: {showHdr },
                 // onClick: () => {
                 //     //     Linking.openURL('https://www.youtube.com/watch?v=aSIiBTEnE3o');
                 // }

@@ -5,10 +5,10 @@
  * @format
  * @flow strict-local
  */
-
-import React, {useEffect, createContext, useMemo, Reducer} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import 'react-native-gesture-handler';
+import React, { useEffect, createContext, useMemo, Reducer } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 // import { Provider } from 'react-redux';
 

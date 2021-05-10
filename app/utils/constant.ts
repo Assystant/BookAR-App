@@ -27,6 +27,8 @@ const SET_BOOKS = 'SET_BOOKS';
 const BOOK_LIST = 'bookList';
 const DARK_COLOR = '#1c313a';
 const WHITE = '#ffffff';
+const HDR_KEY = 'book_ar_hdr_state';
+const AF_KEY = 'book_ar_af_state';
 const constants = {
   baseURI,
   headers,
@@ -42,6 +44,8 @@ const constants = {
   BOOK_LIST,
   WHITE,
   DARK_COLOR,
+  HDR_KEY,
+  AF_KEY,
 };
 
 export default constants;

@@ -4,7 +4,7 @@ import { RouteProp, useFocusEffect } from '@react-navigation/core';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthContext, SplashScreen, StackParamList } from '../../../App';
+import { SplashScreen, StackParamList } from '../../../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import constants from '../../utils/constant';
 import ARScene from './ARScene';
@@ -22,11 +22,32 @@ type ARScreenProps = {
 const ARScreen = ({ route, navigation }: ARScreenProps) => {
   const [loading, setLoading] = useState<Boolean>(true);
   const [loadingFailed, setLoadingFailed] = useState<Boolean>(false);
-  const [showHdr, setHdr] = useState<Boolean>(false);
-  const [showAuto, setshowAuto] = useState<Boolean>(false);
+  const [showHdr, setShowHdr] = useState<Boolean>(false);
+  const [showAuto, setShowAuto] = useState<Boolean>(false);
 
   const { book, bookDescription } = route.params;
+  const loadConfigurationCallback = (errors?: any, result?: any) => {
+    if(errors) {
+      console.log(errors)
+    } 
+    if (result) {
+      result.forEach(res=>{
+        switch (res[0]) {
+          case constants.HDR_KEY:
+            setShowHdr(JSON.parse(res[1]));
+            break;
+          case constants.AF_KEY:
+            setShowAuto(JSON.parse(res[1]));
+            break;
+        }
+      })
+    }
+  }
+  const loadConfiguration = () => {
+    AsyncStorage.multiGet([constants.HDR_KEY, constants.AF_KEY], loadConfigurationCallback);
+  }
   const initializeAR = () => {
+    loadConfiguration();
     setLoading(true);
     const targets = {};
     console.log(bookDescription)
@@ -83,52 +104,53 @@ const ARScreen = ({ route, navigation }: ARScreenProps) => {
       </View>
     );
   }
-  const onPressHdr = async () => {
-    setHdr(!showHdr)
-    await AsyncStorage.setItem('hdr', JSON.stringify(showHdr));
-    AsyncStorage.getItem('hdr').then(showHdr => {
-      // console.log('SHOW HDR',showHdr)
-        })
-
-
+  const onPressHdr = () => {
+    AsyncStorage.setItem(constants.HDR_KEY, JSON.stringify(!showHdr));
+    setShowHdr(!showHdr);
   }
-  const onPressAutoFocus = async () => {
-    setshowAuto(!showAuto)
-    await AsyncStorage.setItem('autoFocus', JSON.stringify(showAuto));
-    AsyncStorage.getItem('autoFocus').then(showAuto => {
-      // console.log('SHOW AUTO',showAuto)
-    })
-
-
+  const onPressAutoFocus = () => {
+    AsyncStorage.setItem(constants.AF_KEY, JSON.stringify(!showAuto));
+    setShowAuto(!showAuto);
   }
   return (
     <>
-      <View style={{ backgroundColor: 'black', height: 5, width: "100%", flex: 0.1, flexDirection: 'row',justifyContent:'space-evenly'}}>
-
-        {showHdr ?
-          <TouchableOpacity onPress={onPressHdr}  disabled={!showHdr}>
-            <Image source={require('../../assests/hdr2.png')} style={{ margin: 10, height: 30, width: 30,marginTop:20,}} />
-          </TouchableOpacity>
-          :
-          <TouchableOpacity onPress={onPressHdr} >
-            <Image source={require('../../assests/hdr1.png')} style={{ margin: 10, height: 30, width: 30,marginTop:20 }} />
-          </TouchableOpacity>
-
-        }
-        {showAuto ?
-          <TouchableOpacity onPress={onPressAutoFocus} disabled={!showAuto}>
-            <Image source={require('../../assests/auto-focus.png')} style={{ margin: 10, height: 30, width: 30 ,marginTop:20}} />
-          </TouchableOpacity>
-          :
-          <TouchableOpacity onPress={onPressAutoFocus} >
-            <Image source={require('../../assests/auto-focus.jpeg')} style={{ margin: 10, height: 30, width: 30,marginTop:20 }} />
-          </TouchableOpacity>
-
-        }
-
+      <View
+        style={{
+          backgroundColor: 'black',
+          height: 5,
+          width: '100%',
+          flex: 0.1,
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+        }}>
+        <TouchableOpacity onPress={onPressHdr}>
+          {showHdr ? (
+            <Image
+              source={require('../../assests/hdr2.png')}
+              style={styles.imageStyle}
+            />
+          ) : (
+            <Image
+              source={require('../../assests/hdr-gray.png')}
+              style={styles.imageStyle}
+            />
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onPressAutoFocus}>
+          {showAuto ? (
+            <Image
+              source={require('../../assests/auto-focus.png')}
+              style={styles.imageStyle}
+            />
+          ) : (
+            <Image
+              source={require('../../assests/auto-focus-gray.png')}
+              style={styles.imageStyle}
+            />
+          )}
+        </TouchableOpacity>
       </View>
       <ViroARSceneNavigator
-    
         apiKey="API_KEY_HERE"
         initialScene={{
           scene: ARScene,
@@ -136,15 +158,27 @@ const ARScreen = ({ route, navigation }: ARScreenProps) => {
             book,
             bookDescription,
             showAuto,
-            showHdr
-          }
+            showHdr,
+          },
         }}
       />
-
     </>
   );
 }
 const styles = StyleSheet.create({
+  imageStyle: {
+    margin: 10,
+    height: 30,
+    width: 30,
+    marginTop: 20,
+  },
+  tintImageStyle: {
+    margin: 10,
+    height: 30,
+    width: 30,
+    marginTop: 20,
+    tintColor: 'gray',
+  },
   container: {
     flex: 1,
     padding: 0,
