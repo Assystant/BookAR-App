@@ -1,5 +1,5 @@
 import React from 'react';
-import {Linking, StyleSheet} from 'react-native';
+// import {Linking, StyleSheet} from 'react-native';
 import {
   ViroARScene,
   ViroAmbientLight,
@@ -64,13 +64,13 @@ const ARScene = ({bookDescription, showAuto, showHdr}) => {
   );
 };
 export default ARScene;
-const styles = StyleSheet.create({
-  backButton: {
-    width: 20,
-    height: 20,
-    backgroundColor: constants.WHITE,
-    position: 'absolute',
-    top: 20,
-    left: 20,
-  },
-});
+// const styles = StyleSheet.create({
+//   backButton: {
+//     width: 20,
+//     height: 20,
+//     backgroundColor: constants.WHITE,
+//     position: 'absolute',
+//     top: 20,
+//     left: 20,
+//   },
+// });

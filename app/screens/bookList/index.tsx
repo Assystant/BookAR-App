@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, FlatList} from 'react-native';
-import {Card, ListItem} from 'react-native-elements';
+import {Card} from 'react-native-elements';
 // import AsyncStorage from '@react-native-community/async-storage';
 // import {NavigationStackScreenProps} from 'react-navigation-stack';
-import {AuthContext, SplashScreen} from '../../../App';
+import {AuthContext} from '../../../App';
 import constants from '../../utils/constant';
 import {useNavigation} from '@react-navigation/core';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Image} from 'react-native-elements/dist/image/Image';
+import SplashScreen from '../splashScreen';
 type BookListProps = {};
 const BookList = ({}: BookListProps) => {
   const nav = useNavigation();
@@ -28,8 +29,8 @@ const BookList = ({}: BookListProps) => {
     setBookList(books);
   };
 
-  useEffect(loadBooks, []);
-  useEffect(setBooks, [loading]);
+  useEffect(loadBooks, [loadBooksList]);
+  useEffect(setBooks, [loading, getBooks]);
   const logout = () => {
     signOut();
   };
@@ -51,17 +52,9 @@ const BookList = ({}: BookListProps) => {
               nav.navigate('BookPhraseDetails', {book: l});
             };
             return (
-              <Card containerStyle={{padding: 0, borderRadius: 10}}>
+              <Card containerStyle={styles.cardContainer}>
                 <TouchableOpacity onPress={itemClick}>
-                  <View
-                    style={{
-                      // padding: 0,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'flex-start',
-                      // flexDirection: 'row',
-                      borderRadius: 10,
-                    }}>
+                  <View style={styles.bookCard}>
                     <Image
                       source={{uri: l.book_cover}}
                       style={styles.bookImage}
@@ -76,7 +69,7 @@ const BookList = ({}: BookListProps) => {
           }}
         />
       </View>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.buttonWrapper}>
         <TouchableOpacity style={styles.button} onPress={logout}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
@@ -153,6 +146,22 @@ const styles = StyleSheet.create({
     margin: 15,
     flex: 1,
     textAlign: 'left',
+  },
+  cardContainer: {
+    padding: 0,
+    borderRadius: 10,
+  },
+  bookCard: {
+    // padding: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    // flexDirection: 'row',
+    borderRadius: 10,
+  },
+  buttonWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

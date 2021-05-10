@@ -1,10 +1,10 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, Text, BackHandler, Image} from 'react-native';
 import {RouteProp, useFocusEffect} from '@react-navigation/core';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import {StackNavigationProp} from '@react-navigation/stack';
-import {SplashScreen, StackParamList} from '../../../App';
+import {StackParamList} from '../../../App';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import constants from '../../utils/constant';
 import ARScene from './ARScene';
@@ -13,15 +13,16 @@ import {
   ViroARSceneNavigator,
   ViroARTrackingTargets,
 } from '@viro-community/react-viro';
+import SplashScreen from '../splashScreen';
 type ARScreenRouteProps = RouteProp<StackParamList, 'ARScreen'>;
 type ARScreenNavigationProps = StackNavigationProp<StackParamList, 'ARScreen'>;
 type ARScreenProps = {
   route: ARScreenRouteProps;
   navigation: ARScreenNavigationProps;
 };
-const ARScreen = ({route, navigation}: ARScreenProps) => {
+const ARScreen = ({route}: ARScreenProps) => {
   const [loading, setLoading] = useState<Boolean>(true);
-  const [loadingFailed, setLoadingFailed] = useState<Boolean>(false);
+  const [loadingFailed] = useState<Boolean>(false);
   const [showHdr, setShowHdr] = useState<Boolean>(false);
   const [showAuto, setShowAuto] = useState<Boolean>(false);
 
@@ -87,7 +88,7 @@ const ARScreen = ({route, navigation}: ARScreenProps) => {
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [bookDescription, loading]),
   );
-  useEffect(initializeAR, []);
+  useEffect(initializeAR, [bookDescription, loadConfiguration]);
   if (loading) {
     return <SplashScreen />;
   }
@@ -111,15 +112,7 @@ const ARScreen = ({route, navigation}: ARScreenProps) => {
   };
   return (
     <>
-      <View
-        style={{
-          backgroundColor: 'black',
-          height: 5,
-          width: '100%',
-          flex: 0.1,
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-        }}>
+      <View style={styles.screenWrapper}>
         <TouchableOpacity onPress={onPressHdr}>
           {showHdr ? (
             <Image
@@ -163,6 +156,14 @@ const ARScreen = ({route, navigation}: ARScreenProps) => {
   );
 };
 const styles = StyleSheet.create({
+  screenWrapper: {
+    backgroundColor: 'black',
+    height: 5,
+    width: '100%',
+    flex: 0.1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
   imageStyle: {
     margin: 10,
     height: 30,

@@ -114,8 +114,7 @@ export default class BookDEtails extends Component<Props> {
 
     bookDetail !== undefined ? (
       bookDetail.map(l =>
-
-                // console.log('LL',l.book_cover)
+        // console.log('LL',l.book_cover)
 
         RNFS.downloadFile({
           fromUrl:
@@ -126,7 +125,7 @@ export default class BookDEtails extends Component<Props> {
         }),
       )
     ) : (
-      <></>;
+      <></>
     );
   };
 

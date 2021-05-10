@@ -14,46 +14,20 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 // import { createStore, applyMiddleware, StoreEnhancer } from 'redux';
 
-// import BookList from './app/screens/bookList';
 import LogIn from './app/screens/login';
-// import DownloadFile from './app/screens/downloadBook';
 import BookList from './app/screens/bookList';
 import BookDescription from './app/screens/bookDescription';
 import ARScreen from './app/screens/arScreen';
-// import BookDEtails from './app/screens/bookDetails';
-// import BookCard from './app/screens/bookCard';
-// import CalenderExample from './app/screens/calender';
 import AsyncStorage from '@react-native-community/async-storage';
 import constants from './app/utils/constant';
 import {authenticate, getBookList} from './app/services/book.service';
-import {ActivityIndicator, StatusBar, View} from 'react-native';
+import SplashScreen from './app/screens/splashScreen';
 
 // type AuthContextType = {
 //   signIn: any;
 //   signOut: any;
 // }
 export const AuthContext = createContext<any>(null);
-
-export const SplashScreen = () => (
-  <View
-    style={{
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      top: 0,
-      backgroundColor: constants.DARK_COLOR,
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}>
-    <StatusBar
-      translucent
-      barStyle="light-content"
-      backgroundColor={constants.DARK_COLOR}
-    />
-    <ActivityIndicator size="large" color={constants.WHITE} />
-  </View>
-);
 
 export type StackParamList = {
   Home: undefined;
