@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, FlatList} from 'react-native';
 import {Card, ListItem} from 'react-native-elements';
-import AsyncStorage from '@react-native-community/async-storage';
-import {NavigationStackScreenProps} from 'react-navigation-stack';
+// import AsyncStorage from '@react-native-community/async-storage';
+// import {NavigationStackScreenProps} from 'react-navigation-stack';
 import {AuthContext, SplashScreen} from '../../../App';
 import constants from '../../utils/constant';
-import {useNavigation, useNavigationState} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/core';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from 'react-native-elements/dist/image/Image';
 type BookListProps = {};
@@ -47,31 +47,28 @@ const BookList = ({}: BookListProps) => {
           keyExtractor={(l, i) => `book-item-${l.id}-${i}`}
           scrollEnabled
           renderItem={({item: l}: any) => {
-            console.log(l)
             const itemClick = () => {
               nav.navigate('BookPhraseDetails', {book: l});
             }
             return (
               <Card containerStyle={{padding: 0, borderRadius: 10}}>
-                <TouchableOpacity
-                  style={{
-                  }}
-                  onPress={itemClick}>
-                    <View style={{
-                    // padding: 0,
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    // flexDirection: 'row',
-                    borderRadius:10,
-                    padding: 10,
-                  }}>
-                  <Image
-                    source={{uri: l.book_cover}}
-                    style={styles.bookImage}
-                  />
-                  <Text style={{margin: 15, flex: 1, textAlign: 'left'}}>
-                    {l.name}
-                  </Text>
+                <TouchableOpacity onPress={itemClick}>
+                  <View
+                    style={{
+                      // padding: 0,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      // flexDirection: 'row',
+                      borderRadius: 10,
+                    }}>
+                    <Image
+                      source={{uri: l.book_cover}}
+                      style={styles.bookImage}
+                    />
+                    <Text style={styles.bookTitle} numberOfLines={1}>
+                      {l.name}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </Card>
@@ -146,14 +143,15 @@ const styles = StyleSheet.create({
   },
   bookImage: {
     width: 50,
-    flex:1,
+    flex: 1,
     height: 50,
-    // borderRadius: 10,
-    borderColor: constants.DARK_COLOR,
-    backgroundColor: 'gray',
-    borderWidth: 1,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
+  },
+  bookTitle: {
+    margin: 15, 
+    flex: 1, 
+    textAlign: 'left'
   },
 });
 
