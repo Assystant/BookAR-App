@@ -6,9 +6,9 @@
  * @flow strict-local
  */
 import 'react-native-gesture-handler';
-import React, { useEffect, createContext, useMemo, Reducer } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React, {useEffect, createContext, useMemo, Reducer} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
 // import { Provider } from 'react-redux';
 
@@ -24,16 +24,15 @@ import ARScreen from './app/screens/arScreen';
 // import BookCard from './app/screens/bookCard';
 // import CalenderExample from './app/screens/calender';
 import AsyncStorage from '@react-native-community/async-storage';
-import constants from './app/utils/constant'; 
+import constants from './app/utils/constant';
 import {authenticate, getBookList} from './app/services/book.service';
-import { ActivityIndicator, StatusBar, View } from 'react-native';
+import {ActivityIndicator, StatusBar, View} from 'react-native';
 
 // type AuthContextType = {
 //   signIn: any;
 //   signOut: any;
 // }
 export const AuthContext = createContext<any>(null);
-
 
 export const SplashScreen = () => (
   <View
@@ -45,24 +44,28 @@ export const SplashScreen = () => (
       top: 0,
       backgroundColor: constants.DARK_COLOR,
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     }}>
-      <StatusBar translucent barStyle="light-content" backgroundColor={constants.DARK_COLOR} />
-      <ActivityIndicator size="large" color={constants.WHITE} />
-    </View>
+    <StatusBar
+      translucent
+      barStyle="light-content"
+      backgroundColor={constants.DARK_COLOR}
+    />
+    <ActivityIndicator size="large" color={constants.WHITE} />
+  </View>
 );
 
 export type StackParamList = {
   Home: undefined;
   BookList: undefined;
   BookPhraseDetails: {
-    book: any,
+    book: any;
   };
   ARScreen: {
-    book: any,
-    bookDescription: any,
-  }
-}
+    book: any;
+    bookDescription: any;
+  };
+};
 const Stack = createStackNavigator<StackParamList>();
 type State = {
   isLoading: boolean;
@@ -73,8 +76,8 @@ type State = {
 type Action = {
   type: string;
   token?: string;
-  books?: Array<any>
-}
+  books?: Array<any>;
+};
 const App = () => {
   const [state, dispatch] = React.useReducer<Reducer<State, Action>>(
     (prevState: State, action: Action) => {
@@ -102,7 +105,7 @@ const App = () => {
           return {
             ...prevState,
             books: action.books,
-          }
+          };
       }
     },
     {
@@ -121,7 +124,7 @@ const App = () => {
         userToken = await AsyncStorage.getItem(constants.USER_TOKEN);
       } catch (e) {
         // Restoring token failed
-        userToken= null;
+        userToken = null;
       }
 
       // After restoring token, we may need to validate it in production apps
@@ -136,15 +139,15 @@ const App = () => {
         // Restoring token failed
         bookList = [];
       }
-      if(!bookList) {
+      if (!bookList) {
         bookList = [];
       }
-      dispatch({type: constants.SET_BOOKS, books: bookList})
+      dispatch({type: constants.SET_BOOKS, books: bookList});
     };
 
     bootstrapAsync();
   }, []);
-  const { userToken, books } = state;
+  const {userToken, books} = state;
   const authContext = useMemo(
     () => ({
       signIn: async (username: string, password: string, callback?: any) => {
@@ -170,50 +173,45 @@ const App = () => {
             console.log('error', _err);
           })
           .then(() => {
-            if(callback){
+            if (callback) {
               callback();
             }
           });
-
       },
       signOut: () => dispatch({type: constants.SIGN_OUT}),
-      getToken: () => userToken, 
+      getToken: () => userToken,
       loadBooksList: async (callback?: any) => {
         getBookList({userToken})
           .then(async response => {
             const responseStatus = response[0];
             const responseJSON = response[1];
-            console.log(responseJSON)
-            if(responseStatus === 200) {
+            if (responseStatus === 200) {
               await AsyncStorage.setItem(
                 constants.BOOK_LIST,
                 JSON.stringify(responseJSON.results),
               );
               dispatch({
                 type: constants.SET_BOOKS,
-                books: [
-                  ...responseJSON.results,
-                ],
+                books: [...responseJSON.results],
               });
             } else {
-              console.log("error", responseJSON);
+              console.log('error', responseJSON);
             }
           })
           .catch(_err => {
             console.log('error', _err);
           })
-          .then(()=> {
-            if(callback) {
+          .then(() => {
+            if (callback) {
               callback();
             }
-          })
+          });
       },
       getBooks: () => {
-        console.log('called', books, state)
         return books;
       },
-    }), 
-    [userToken, books,],
+    }),
+    [userToken, books],
   );
 
   if (state.isLoading) {
@@ -271,7 +269,7 @@ const App = () => {
                   bookDescription: {},
                 }}
                 options={{
-                  headerShown:false,
+                  headerShown: false,
                 }}
               />
             </>

@@ -1,11 +1,11 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, Text, BackHandler, Image } from 'react-native';
-import { RouteProp, useFocusEffect } from '@react-navigation/core';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
+import {View, StyleSheet, Text, BackHandler, Image} from 'react-native';
+import {RouteProp, useFocusEffect} from '@react-navigation/core';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { StackNavigationProp } from '@react-navigation/stack';
-import { SplashScreen, StackParamList } from '../../../App';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {SplashScreen, StackParamList} from '../../../App';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import constants from '../../utils/constant';
 import ARScene from './ARScene';
 
@@ -16,22 +16,22 @@ import {
 type ARScreenRouteProps = RouteProp<StackParamList, 'ARScreen'>;
 type ARScreenNavigationProps = StackNavigationProp<StackParamList, 'ARScreen'>;
 type ARScreenProps = {
-  route: ARScreenRouteProps,
-  navigation: ARScreenNavigationProps,
+  route: ARScreenRouteProps;
+  navigation: ARScreenNavigationProps;
 };
-const ARScreen = ({ route, navigation }: ARScreenProps) => {
+const ARScreen = ({route, navigation}: ARScreenProps) => {
   const [loading, setLoading] = useState<Boolean>(true);
   const [loadingFailed, setLoadingFailed] = useState<Boolean>(false);
   const [showHdr, setShowHdr] = useState<Boolean>(false);
   const [showAuto, setShowAuto] = useState<Boolean>(false);
 
-  const { book, bookDescription } = route.params;
+  const {book, bookDescription} = route.params;
   const loadConfigurationCallback = (errors?: any, result?: any) => {
-    if(errors) {
-      console.log(errors)
-    } 
+    if (errors) {
+      console.log(errors);
+    }
     if (result) {
-      result.forEach(res=>{
+      result.forEach(res => {
         switch (res[0]) {
           case constants.HDR_KEY:
             setShowHdr(JSON.parse(res[1]));
@@ -40,20 +40,22 @@ const ARScreen = ({ route, navigation }: ARScreenProps) => {
             setShowAuto(JSON.parse(res[1]));
             break;
         }
-      })
+      });
     }
-  }
+  };
   const loadConfiguration = () => {
-    AsyncStorage.multiGet([constants.HDR_KEY, constants.AF_KEY], loadConfigurationCallback);
-  }
+    AsyncStorage.multiGet(
+      [constants.HDR_KEY, constants.AF_KEY],
+      loadConfigurationCallback,
+    );
+  };
   const initializeAR = () => {
     loadConfiguration();
     setLoading(true);
     const targets = {};
-    console.log(bookDescription)
     bookDescription.forEach(phrase => {
       targets[`trigger_${phrase.id}`] = {
-        source: { uri: constants.baseURI(phrase.trigger) },
+        source: {uri: constants.baseURI(phrase.trigger)},
         orientation: 'Up',
         physicalWidth: 0.1, // real world width in meters
       };
@@ -64,29 +66,26 @@ const ARScreen = ({ route, navigation }: ARScreenProps) => {
       bookDescription.forEach(phrase => {
         ViroARTrackingTargets.deleteTarget(`trigger_${phrase.id}`);
       });
-    }
-  }
+    };
+  };
   useFocusEffect(
-    useCallback(
-      () => {
-        const onBackPress = () => {
-          if (!loading) {
-            bookDescription.forEach(phrase => {
-              ViroARTrackingTargets.deleteTarget(`trigger_${phrase.id}`);
-            });
-            setLoading(true);
-            setTimeout(onBackPress, 1000);
-            return true;
-          } else {
-            // return false;
-          }
+    useCallback(() => {
+      const onBackPress = () => {
+        if (!loading) {
+          bookDescription.forEach(phrase => {
+            ViroARTrackingTargets.deleteTarget(`trigger_${phrase.id}`);
+          });
+          setLoading(true);
+          setTimeout(onBackPress, 1000);
+          return true;
+        } else {
+          // return false;
         }
-        BackHandler.addEventListener('hardwareBackPress', onBackPress);
-        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-
-      },
-      [bookDescription, loading],
-    )
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [bookDescription, loading]),
   );
   useEffect(initializeAR, []);
   if (loading) {
@@ -95,9 +94,7 @@ const ARScreen = ({ route, navigation }: ARScreenProps) => {
   if (loadingFailed) {
     return (
       <View style={[styles.container, styles.emptyContainer]}>
-        <Text style={styles.emptyContainerText}>
-          Failed to load AR
-          </Text>
+        <Text style={styles.emptyContainerText}>Failed to load AR</Text>
         <TouchableOpacity onPress={initializeAR}>
           <Text style={styles.retryButton}>Retry</Text>
         </TouchableOpacity>
@@ -107,11 +104,11 @@ const ARScreen = ({ route, navigation }: ARScreenProps) => {
   const onPressHdr = () => {
     AsyncStorage.setItem(constants.HDR_KEY, JSON.stringify(!showHdr));
     setShowHdr(!showHdr);
-  }
+  };
   const onPressAutoFocus = () => {
     AsyncStorage.setItem(constants.AF_KEY, JSON.stringify(!showAuto));
     setShowAuto(!showAuto);
-  }
+  };
   return (
     <>
       <View
@@ -164,7 +161,7 @@ const ARScreen = ({ route, navigation }: ARScreenProps) => {
       />
     </>
   );
-}
+};
 const styles = StyleSheet.create({
   imageStyle: {
     margin: 10,

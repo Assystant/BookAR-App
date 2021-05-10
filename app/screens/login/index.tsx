@@ -23,8 +23,9 @@ const LogIn = ({}: LoginProps) => {
   const {signIn} = React.useContext(AuthContext);
 
   const signInCallback = () => {
-    if(setLoading)
-    setLoading(false);
+    if (setLoading) {
+      setLoading(false);
+    }
   };
   const onFormSubmit = () => {
     setLoading(true);
@@ -57,7 +58,11 @@ const LogIn = ({}: LoginProps) => {
         style={[styles.button]}
         onPress={onFormSubmit}
         disabled={loading}>
-        {loading ? ( <ActivityIndicator color={constants.WHITE} size="small" /> ) : ( <Text style={styles.buttonText}>LogIn</Text> )}
+        {loading ? (
+          <ActivityIndicator color={constants.WHITE} size="small" />
+        ) : (
+          <Text style={styles.buttonText}>LogIn</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -69,7 +74,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical:20,
+    paddingVertical: 20,
   },
   heading: {
     fontSize: 48,

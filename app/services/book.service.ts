@@ -58,4 +58,10 @@ const getBookDescription = async (id: number, token: any) => {
   });
 };
 
-export {bookEndpoints, authenticate, getBookList, getBookDescription, bookDetails};
+export {
+  bookEndpoints,
+  authenticate,
+  getBookList,
+  getBookDescription,
+  bookDetails,
+};

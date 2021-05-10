@@ -6,8 +6,8 @@ import {Card, ListItem} from 'react-native-elements';
 import {AuthContext, SplashScreen} from '../../../App';
 import constants from '../../utils/constant';
 import {useNavigation} from '@react-navigation/core';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Image } from 'react-native-elements/dist/image/Image';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Image} from 'react-native-elements/dist/image/Image';
 type BookListProps = {};
 const BookList = ({}: BookListProps) => {
   const nav = useNavigation();
@@ -32,7 +32,7 @@ const BookList = ({}: BookListProps) => {
   useEffect(setBooks, [loading]);
   const logout = () => {
     signOut();
-  }
+  };
   // moveToBookDetails = l => {
   //   this.props.navigation.navigate('BookCard');
   // };
@@ -49,7 +49,7 @@ const BookList = ({}: BookListProps) => {
           renderItem={({item: l}: any) => {
             const itemClick = () => {
               nav.navigate('BookPhraseDetails', {book: l});
-            }
+            };
             return (
               <Card containerStyle={{padding: 0, borderRadius: 10}}>
                 <TouchableOpacity onPress={itemClick}>
@@ -72,14 +72,15 @@ const BookList = ({}: BookListProps) => {
                   </View>
                 </TouchableOpacity>
               </Card>
-            );}}
+            );
+          }}
         />
       </View>
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <TouchableOpacity style={styles.button} onPress={logout}>
-            <Text style={styles.buttonText}>Logout</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <TouchableOpacity style={styles.button} onPress={logout}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 };
@@ -149,9 +150,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
   },
   bookTitle: {
-    margin: 15, 
-    flex: 1, 
-    textAlign: 'left'
+    margin: 15,
+    flex: 1,
+    textAlign: 'left',
   },
 });
 

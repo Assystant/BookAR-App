@@ -2,19 +2,22 @@ import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet, Text, Image, ScrollView} from 'react-native';
 import {Card} from 'react-native-elements';
 import {getBookDescription} from '../../services/book.service';
-import { RouteProp } from '@react-navigation/core';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthContext, SplashScreen, StackParamList } from '../../../App';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {RouteProp} from '@react-navigation/core';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {AuthContext, SplashScreen, StackParamList} from '../../../App';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import constants from '../../utils/constant';
 
 type BookDescriptionRouteProps = RouteProp<StackParamList, 'BookPhraseDetails'>;
-type BookDescriptionNavigationProps = StackNavigationProp<StackParamList, 'BookPhraseDetails'>;
+type BookDescriptionNavigationProps = StackNavigationProp<
+  StackParamList,
+  'BookPhraseDetails'
+>;
 type BookDescriptionProps = {
-  route:BookDescriptionRouteProps,
-  navigation: BookDescriptionNavigationProps,
+  route: BookDescriptionRouteProps;
+  navigation: BookDescriptionNavigationProps;
 };
-const BookDescription = ({route, navigation}:BookDescriptionProps) => {
+const BookDescription = ({route, navigation}: BookDescriptionProps) => {
   const [loading, setLoading] = useState<Boolean>(true);
   const [loadingFailed, setLoadingFailed] = useState<Boolean>(false);
   const [bookDescription, setBookDescription] = useState<any>({});
@@ -48,61 +51,59 @@ const BookDescription = ({route, navigation}:BookDescriptionProps) => {
       });
   };
   const initializeAR = () => {
-    navigation.navigate("ARScreen", {
+    navigation.navigate('ARScreen', {
       book,
       bookDescription,
-    })
-  }
+    });
+  };
   useEffect(loadBookDescription, []);
-    if(loading) {
-      return <SplashScreen />;
-    }
-    if(loadingFailed) {
-      return (
-        <View style={[styles.container, styles.emptyContainer]}>
-          <Text style={styles.emptyContainerText}>
-            Failed to retrieve description
-          </Text>
-          <TouchableOpacity onPress={loadBookDescription}>
-            <Text style={styles.retryButton}>Retry</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
+  if (loading) {
+    return <SplashScreen />;
+  }
+  if (loadingFailed) {
     return (
-      <>
-        <View style={styles.container}>
-          <Card
-            containerStyle={styles.cardContainer}
-            wrapperStyle={styles.card}>
-            <Image
-              source={{uri: book.book_cover}}
-              defaultSource={require('../../assests/Jungle_Book.jpg')}
-              style={styles.bookImage}
-            />
-            <ScrollView style={styles.contentContainer}>
-              <View style={{marginBottom: 25}} />
-              <Text style={styles.bookLabel}>Title:</Text>
-              <Text style={styles.bookTitle}> {book.name}</Text>
-              <Text style={styles.bookLabel}>Description:</Text>
-              <Text style={styles.bookTitle}>{book.description}</Text>
-              <View style={{marginBottom: 50}} />
-            </ScrollView>
-          </Card>
-        </View>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: 50,
-          }}>
-          <TouchableOpacity style={styles.button} onPress={initializeAR}>
-            <Text style={styles.buttonText}>Start</Text>
-          </TouchableOpacity>
-        </View>
-      </>
+      <View style={[styles.container, styles.emptyContainer]}>
+        <Text style={styles.emptyContainerText}>
+          Failed to retrieve description
+        </Text>
+        <TouchableOpacity onPress={loadBookDescription}>
+          <Text style={styles.retryButton}>Retry</Text>
+        </TouchableOpacity>
+      </View>
     );
-        }
+  }
+  return (
+    <>
+      <View style={styles.container}>
+        <Card containerStyle={styles.cardContainer} wrapperStyle={styles.card}>
+          <Image
+            source={{uri: book.book_cover}}
+            defaultSource={require('../../assests/Jungle_Book.jpg')}
+            style={styles.bookImage}
+          />
+          <ScrollView style={styles.contentContainer}>
+            <View style={{marginBottom: 25}} />
+            <Text style={styles.bookLabel}>Title:</Text>
+            <Text style={styles.bookTitle}> {book.name}</Text>
+            <Text style={styles.bookLabel}>Description:</Text>
+            <Text style={styles.bookTitle}>{book.description}</Text>
+            <View style={{marginBottom: 50}} />
+          </ScrollView>
+        </Card>
+      </View>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 50,
+        }}>
+        <TouchableOpacity style={styles.button} onPress={initializeAR}>
+          <Text style={styles.buttonText}>Start</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
