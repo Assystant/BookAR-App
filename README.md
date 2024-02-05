@@ -1,10 +1,11 @@
 # BookAR-Server
 
-This is a React Native application for BookAR-Server.
+This is a React Native application for [BookAR-Server](https://github.com/Assystant/BookAR-Server).
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+The app relies on BookAR-Server for communication and backend tasks.
 
 ### Prerequisites
 
@@ -18,12 +19,12 @@ These instructions will get you a copy of the project up and running on your loc
 1. Clone the repository:
 
 ```sh
-git clone https://github.com/yourusername/BookAR-Server.git
+git clone https://github.com/yourusername/BookAR-App.git
 ```
 
 2. Install dependencies:
 ```sh
-cd BookAR-Server
+cd BookAR-App
 npm install
 ```
 or
